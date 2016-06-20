@@ -155,6 +155,18 @@ declare module "sdk/context-menu" {
 
 }
 
+declare module "sdk/hotkeys" {
+  interface Hotkey {
+    destroy: () => void;
+  }
+  /**
+   * Hotkey
+   * Used to define a hotkey combination passing it the combination and a function to be called when the user 
+   * presses that combination
+   */
+  export function Hotkey(options: {combo: string, onPress: () => void}): Hotkey;
+}
+
 export module "sdk/page-mod" {
 
 }
