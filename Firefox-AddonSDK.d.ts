@@ -3,7 +3,7 @@
 // Definitions by: Mohammed Hamdy <https://github.com/github-account-because-they-want-it>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-declare module "base64" {
+declare module "sdk/base64" {
 
   /**
    * Creates a base-64 encoded ASCII string from a string of binary data
@@ -21,3 +21,18 @@ declare module "base64" {
   export function decode(data: string, charset?: string): string;
 }
 
+declare module "sdk/clipboard" {
+
+  /**
+   * get the contents of the system clipboard
+   * @param datatype [text|html|image] Retrieve the clipboard contents only if matching this type
+   */
+  export function get(datatype?: string): string;
+
+  /**
+   * Replace the contents of the user's clipboard with the provided data
+   * @param data The data to put on the clipboard
+   * @param datatype [text|html|image] The type of the data
+   */
+  export function set(data: string, datatype?: string): void;
+}
