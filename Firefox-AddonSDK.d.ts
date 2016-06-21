@@ -103,8 +103,7 @@ declare module "sdk/context-menu" {
     add: (context: Context) => void;
     remove: (context: Context) => void;
   }
-
-  // Item overloads
+  
   interface Item {
     context: ItemContext;
     destroy: () => void;
@@ -260,6 +259,50 @@ export module "sdk/page-mod" {
   }
 
 }
+
+declare module "sdk/page-worker" {
+
+  /**
+   * Create a permanent, invisible page and access its DOM
+   * @param options.contentURL The URL of the content to load in the worker
+   * @param options.contentScript A string or an array of strings containing the texts of content scripts to load.
+   *                              Content scripts specified by this option are loaded after those specified by the
+   *                              contentScriptFile option.
+   * @param options.contentScriptFile A local file URL or an array of local file URLs of content scripts to load
+   *                                  Content scripts specified by this option are loaded before those specified
+   *                                  by the contentScript option
+   * @param options.include This is useful when your page worker loads a page which will redirect to other pages.
+   *                        These define the documents to which the page-worker's content worker applies
+   * @param options.contentScriptWhen When to load the content scripts
+   *                                  "start": load content scripts immediately after the document element for the page
+   *                                    is inserted into the DOM, but before the DOM content itself has been loaded
+   *                                  "ready": load content scripts once DOM content has been loaded, corresponding
+   *                                    to the DOMContentLoaded event
+   *                                  "end": load content scripts once all the content (DOM, JS, CSS, images) for the
+   *                                    page has been loaded, at the time the window.onload event fires
+   * @param options.contentScriptOptions Read-only value exposed to content scripts under self.options property
+   */
+  export function Page(options: {contentURL?: string, contentScript?: string | string[],
+                       contentScriptFile?: string | string[], contentScriptWhen?: "start" | "ready" | "end",
+                       onMessage?: (message: string) => void, allow?: {script: boolean}, contentScriptOptions?: any,
+                       include?: string | string[] | RegExp | RegExp[]}): PageWorker;
+
+  interface PageWorker {
+    port: Port;
+    contentURL?: string;
+    destroy: () => void;
+    postMessage: (message: string) => void;
+    on: (signal: "message" | "error", handler: (arg?: "message" | Error) => void) => void;
+    removeListener: (signal: string, listener: Function) => void;
+    allow?: {script: boolean};
+    include?: string | string[] | RegExp | RegExp[];
+    contentScriptFile?: string | string[];
+    contentScript?: string | string[];
+  }
+
+}
+
+
 
 export module "sdk/self" {
   // TODO: data.url() returns a string
