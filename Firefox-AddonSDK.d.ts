@@ -167,6 +167,20 @@ declare module "sdk/hotkeys" {
   export function Hotkey(options: {combo: string, onPress: () => void}): Hotkey;
 }
 
+declare module "sdk/indexed-db" {
+  
+  // these interfaces are already provided by TypeScript
+  
+  interface IndexedImpl {
+    indexedDB: IDBFactory;
+    IDBKeyRange: IDBKeyRange;
+    DOMException: DOMException;
+  }
+
+  export = IndexedImpl;
+}
+
+
 export module "sdk/page-mod" {
 
 }
