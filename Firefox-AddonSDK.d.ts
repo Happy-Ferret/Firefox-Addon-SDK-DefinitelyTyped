@@ -180,6 +180,20 @@ declare module "sdk/indexed-db" {
   export = IndexedImpl;
 }
 
+declare module "sdk/l10n" {
+  /**
+   * This function takes a string parameter which it uses as an identifier to look up and return a localized string in
+   * the locale currently set for Firefox. Localized strings are supplied by the add-on developer in .properties
+   * files stored in the add-ons "locale" directory
+   * See {@link https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/l10n}
+   * @param identifier An identifier for the localization of a particular string in the current locale
+   * @param count If you're supplying different localizations for a string for singular or plural forms,
+   *              this parameter is the number of items there are in this case
+   * @param placeholder If you do not include the count parameter, you can supply one or more placeholder strings that
+   *                    are to be inserted into the translated string at locations defined by the translator
+   */
+  export function get(identifier: string, count?: number, ...placeholder: string[]): string;
+}
 
 export module "sdk/page-mod" {
 
