@@ -210,7 +210,54 @@ declare module "sdk/notifications" {
                                    data?: string}): void;
 }
 
+interface Port {
+  emit: (signal: string, data?: any) => void;
+  on: (signal: string, handler: (data?: any) => void) => void;
+}
+
+interface Tab {
+  title: string;
+}
+
+interface ContentWorker {
+  new(options: {window: Window, contentScript?: string | string[], contentScriptFile?: string | string[],
+                onMessage: (data?: any) => void, onError: (data?: any) => void}): ContentWorker;
+  url: URL;
+  port: Port,
+  tab: Tab;
+  on: (signal: "detach" | "message" | "error", handler: () => void) => void;
+  postMessage: (data?: any) => void;
+  destroy: () => void;
+}
+
 export module "sdk/page-mod" {
+  /**
+   * Run scripts in the context of web pages whose URL matches a given pattern
+   * @param options.include
+   * @param options.contentStyle Lists stylesheets to attach, supplied as strings
+   * @param options.contentStyleFile Lists stylesheets to attach, supplied in separate files
+   * @param options.contentScriptOptions Defines read-only values accessible to content scripts
+   * @param options.attachTo Controls whether to attach scripts to tabs that were already open when the page-mod
+   *                         was created, and whether to attach scripts to iframes as well as the topmost document
+   * @param options.contentScriptWhen Controls the point during document load at which content scripts are attached
+   * @param options.exclude Has the same syntax as include, but specifies the URLs to which content scripts should not
+   *                        be attached, even if they match include: so it's a way of excluding a subset of the URLs
+   *                        that include specifies. The exclude option is new in Firefox 32
+   * @param options.onAttach This event is emitted when the page-mod's content scripts are attached to a document
+   *                         whose URL matches the page-mod's include pattern
+   * @param options.onError This event is emitted when an uncaught runtime error occurs in one of the page-mod's content scripts
+   */
+  export function PageMod(options: {include: string | string[] | RegExp | RegExp[], contentScript?: string | string[],
+    contentScriptFile?: string | string[], contentStyle?: string | string[], contentStyleFile?: string | string[],
+    contentScriptOptions?: any, attachTo?: attachmentMode | attachmentMode[], contentScriptWhen?: "start" | "ready" | "end",
+    exclude?: string | string[], onAttach?: (worker: ContentWorker) => void, onError?: (error: Error) => void}): PageMod;
+
+  type attachmentMode = "existing" | "top" | "frame"
+
+  interface PageMod {
+    destroy: () => void;
+    include: string | string[] | RegExp | RegExp[];
+  }
 
 }
 
