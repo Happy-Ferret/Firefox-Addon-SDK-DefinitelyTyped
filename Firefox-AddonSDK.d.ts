@@ -195,6 +195,21 @@ declare module "sdk/l10n" {
   export function get(identifier: string, count?: number, ...placeholder: string[]): string;
 }
 
+declare module "sdk/notifications" {
+  /**
+   * Display transient, toaster-style desktop messages to the user
+   * @param options
+   * @param options.title A string to display as the message's title
+   * @param options.text A string to display as the body of the message
+   * @param options.iconURL The URL of an icon to display inside the message. It may be a remote URL, a data URI,
+   *                        or a URL returned by the {@link sdk/self} module
+   * @param options.onClick A function to be called when the user clicks the message. It will be passed the value of data
+   * @param options.data A string that will be passed to onClick
+   */
+  export function notify(options: {title?: string, text?: string, iconURL?: string, onClick?: (data: string) => void,
+                                   data?: string}): void;
+}
+
 export module "sdk/page-mod" {
 
 }
