@@ -234,8 +234,8 @@ declare module "sdk/notifications" {
  * @see [port API]{@link https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port}
  */
 interface Port {
-  emit: (signal: string, data?: any) => void;
-  on: (signal: string, handler: (data?: any) => void) => void;
+  emit: (event: string, data?: any) => void;
+  on: (event: string, handler: (data?: any) => void) => void;
 }
 
 interface Tab {
@@ -248,7 +248,7 @@ interface ContentWorker {
   url: URL;
   port: Port,
   tab: Tab;
-  on: (signal: "detach" | "message" | "error", handler: () => void) => void;
+  on: (event: "detach" | "message" | "error", handler: () => void) => void;
   postMessage: (data?: any) => void;
   destroy: () => void;
 }
@@ -318,8 +318,8 @@ declare module "sdk/page-worker" {
     contentURL?: string;
     destroy: () => void;
     postMessage: (message: string) => void;
-    on: (signal: "message" | "error", handler: (arg?: "message" | Error) => void) => void;
-    removeListener: (signal: string, listener: Function) => void;
+    on: (event: "message" | "error", handler: (arg?: "message" | Error) => void) => void;
+    removeListener: (event: string, listener: Function) => void;
     allow?: {script: boolean};
     include?: string | string[] | RegExp | RegExp[];
     contentScriptFile?: string | string[];
@@ -379,8 +379,8 @@ declare module "sdk/panel" {
     resize: (width: number, height: number) => void;
     destroy: () => void;
     postMessage: (message: string) => void;
-    on: (signal: "show" | "hide" | "message" | "error", handler: (arg?: Error | any) => void) => void;
-    removeListener: (signal: string, listener: Function) => void;
+    on: (event: "show" | "hide" | "message" | "error", handler: (arg?: Error | any) => void) => void;
+    removeListener: (event: string, listener: Function) => void;
     port: Port;
     isShowing: boolean;
     height: number;
@@ -520,6 +520,38 @@ declare module "sdk/request" {
     headers: Object;
     anonymous: boolean;
   }
+}
+
+declare module "sdk/selection" {
+  /**
+   * Get and set text and HTML selections in the current web page
+   */
+
+  // there's no way I know of to limit the event to 'select' only and so this hack
+  // this should not even be an argument to the function but I'm not Firefox
+  export function on(event: "select" | "select", handler: () => void): void;
+  export function removeListener(event: "select" | "select", handler: Function): void
+  /**
+   * Gets or sets the current selection as plain text. Setting the selection removes all current selections,
+   * inserts the specified text at the location of the first selection, and selects the new text.
+   * Getting the selection when there is no current selection returns null.
+   * Setting the selection when there is no current selection throws an exception
+   * Getting the selection when isContiguous is true returns the text of the first selection
+   */
+  export var text: string;
+  /**
+   * Gets or sets the current selection as HTML. Setting the selection removes all current selections,
+   * inserts the specified text at the location of the first selection, and selects the new text.
+   * Getting the selection when there is no current selection returns null.
+   * Setting the selection when there is no current selection throws an exception.
+   * Getting the selection when isContiguous is true returns the text of the first selection
+   */
+  export var html: string;
+  /**
+   * true if the current selection is a single, contiguous selection,
+   * and false if there are two or more discrete selections, each of which may or may not be spatially adjacent.
+   */
+  export const isContiguous: boolean;
 }
 
 declare module "sdk/self" {
