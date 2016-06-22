@@ -783,6 +783,37 @@ interface Tab {
   getThumbnail: () => string;
 }
 
+/**
+ * Set one-off and periodic timers
+ */
+declare module "sdk/timers" {
+
+  /**
+   * Schedules callback to be called in ms milliseconds. Any additional arguments are passed straight through to the callback
+   */
+  export function setTimeout(callback: (...args: any[]) => void, timeoutMS: number): TIMEOUT_ID;
+
+  /**
+   * Given an ID returned from setTimeout(), prevents the callback with the ID from being called (if it hasn't yet been called)
+   */
+  export function clearTimeout(timerID: TIMEOUT_ID): void;
+
+  /**
+   * Schedules callback to be called repeatedly every ms milliseconds
+   * Any additional arguments are passed straight through to the callback
+   */
+  export function setInterval(callback: (...args: any[]) => void, timeoutMS: number): INTERVAL_ID;
+
+  /**
+   * Given an ID returned from setInterval(), prevents the callback with the ID from being called again
+   */
+  export function clearInterval(intervalID: INTERVAL_ID): void;
+  
+  type TIMEOUT_ID = number;
+  type INTERVAL_ID = number;
+
+}
+
 interface SDKURL {
 }
 

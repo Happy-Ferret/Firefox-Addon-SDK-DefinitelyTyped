@@ -58,3 +58,7 @@ import * as tabs from "sdk/tabs";
 tabs.open({url: "http://example.com", onOpen: (tab) => tab.close()});
 tabs.open("http://example.com");
 console.info(tabs.length);
+
+import * as timers from "sdk/timers";
+timers.clearTimeout(timers.setInterval(() => console.log("hello"), 100));
+timers.clearInterval(timers.setTimeout(() => console.log("hello again"), 100));
