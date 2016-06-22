@@ -7,6 +7,7 @@ import * as pageMod from "sdk/page-mod"
 import * as privateBrowsing from "sdk/private-browsing";
 import * as requests from "sdk/request";
 import * as selection from "sdk/selection";
+import * as self from "sdk/self";
 
 
 base64.decode("jesus", "abc");
@@ -32,3 +33,6 @@ selection.on("select", () => {
     console.log("selection is not not contiguous");
   }
 });
+
+p.contentScriptFile = self.data.url("./hello.js");
+p.show();
