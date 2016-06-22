@@ -214,9 +214,11 @@ declare module "sdk/l10n" {
   export function get(identifier: string, count?: number, ...placeholder: string[]): string;
 }
 
+/**
+ * Display transient, toaster-style desktop messages to the user
+ */
 declare module "sdk/notifications" {
   /**
-   * Display transient, toaster-style desktop messages to the user
    * @param options
    * @param options.title A string to display as the message's title
    * @param options.text A string to display as the body of the message
@@ -253,9 +255,11 @@ interface ContentWorker {
   destroy: () => void;
 }
 
+/**
+ * Run scripts in the context of web pages whose URL matches a given pattern
+ */
 declare module "sdk/page-mod" {
   /**
-   * Run scripts in the context of web pages whose URL matches a given pattern
    * @constructor
    * @param options.include
    * @param options.contentStyle Lists stylesheets to attach, supplied as strings
@@ -285,10 +289,12 @@ declare module "sdk/page-mod" {
 
 }
 
+/**
+ * Create a permanent, invisible page and access its DOM
+ */
 declare module "sdk/page-worker" {
 
   /**
-   * Create a permanent, invisible page and access its DOM
    * @constructor
    * @param options.contentURL The URL of the content to load in the worker
    * @param options.contentScript A string or an array of strings containing the texts of content scripts to load.
@@ -336,9 +342,11 @@ interface Widget {
 
 }
 
+/**
+ * Creates transient dialogs to implement part of an add-on's user interface
+ */
 declare module "sdk/panel" {
   /**
-   * Creates transient dialogs to implement part of an add-on's user interface
    * @constructor
    * @param options.contentURL The URL of the content to load in the panel. That is, they can't refer to remote scripts
    * @param options.width The width of the panel in pixels
@@ -396,11 +404,10 @@ declare module "sdk/panel" {
   type PanelPosition = ToggleButton | Widget | {top?: number, right?: number, bottom?: number, left?: number};
 }
 
+/**
+ * Interact with Firefox's Password Manager to add, retrieve and remove stored credentials
+ */
 declare module "sdk/passwords" {
-  /**
-   * Interact with Firefox's Password Manager to add, retrieve and remove stored credentials
-   */
-
   /**
    * This function is used to retrieve a credential, or a list of credentials, stored in the Password Manager
    * @param options.onComplete The callback function that is called once the function completes successfully
@@ -433,10 +440,11 @@ declare module "sdk/passwords" {
   }
 }
 
+/**
+ * Check whether a given object is private, so an add-on can respect private browsing
+ */
 declare module "sdk/private-browsing" {
-  /**
-   * Check whether a given object is private, so an add-on can respect private browsing
-   */
+
   export function isPrivate(object: Tab | ContentWorker | BrowserWindow): boolean;
 }
 
@@ -470,11 +478,10 @@ declare module "sdk/querystring" {
   export function unescape(query: string): string;
 }
 
+/**
+ * Make simple network requests
+ */
 declare module "sdk/request" {
-  /**
-   * Make simple network requests
-   */
-
   /**
    * This constructor creates a request object that can be used to make network requests
    * @param options.url This is the url to which the request will be made
@@ -522,10 +529,11 @@ declare module "sdk/request" {
   }
 }
 
+/**
+ * Get and set text and HTML selections in the current web page
+ */
 declare module "sdk/selection" {
-  /**
-   * Get and set text and HTML selections in the current web page
-   */
+  // TODO: enable module iteration to return 'selection' items
 
   // there's no way I know of to limit the event to 'select' only and so this hack
   // this should not even be an argument to the function but I'm not Firefox
@@ -554,11 +562,11 @@ declare module "sdk/selection" {
   export const isContiguous: boolean;
 }
 
-declare module "sdk/self" {
-  /**
-   * Access data that is bundled with the add-on, and add-on metadata
-   */
+/**
+ * Access data that is bundled with the add-on, and add-on metadata
+ */
 
+declare module "sdk/self" {
   /**
    * This property represents an add-on associated unique URI string
    * This URI can be used for APIs which require a valid URI string, such as the passwords module
@@ -616,10 +624,10 @@ declare module "sdk/self" {
   
 }
 
+/**
+ * Store preferences across application restarts
+ */
 declare module "sdk/simple-prefs" {
-  /**
-   * Store preferences across application restarts
-   */
 
   /**
    * Registers an event listener that will be called when a preference is changed
@@ -634,6 +642,16 @@ declare module "sdk/simple-prefs" {
   export function removeListener(prefName: string, listener: Function): void;
 
   export const prefs: Object;
+}
+
+/**
+ * Lets an add-on store data so that it's retained across Firefox restarts
+ */
+declare module "sdk/simple-storage" {
+
+  export const storage: any;
+  export const quotaUsage: number;
+  export function on(event: "OverQuota" | "OverQuota", handler: () => void): void;
 }
 
 interface SDKURL {
