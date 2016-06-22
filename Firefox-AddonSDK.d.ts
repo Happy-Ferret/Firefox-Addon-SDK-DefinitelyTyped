@@ -240,10 +240,6 @@ interface Port {
   on: (event: string, handler: (data?: any) => void) => void;
 }
 
-interface Tab {
-  title: string;
-}
-
 interface ContentWorker {
   new(options: {window: Window, contentScript?: string | string[], contentScriptFile?: string | string[],
                 onMessage: (data?: any) => void, onError: (data?: any) => void}): ContentWorker;
@@ -721,6 +717,70 @@ declare module "sdk/system" {
    * The name of the host application's vendor, for example: "Mozilla"
    */
   export const vendor;
+}
+
+/**
+ * Open, manipulate, and access tabs, and receive tab events
+ */
+declare module "sdk/tabs" {
+  // TODO: allow enumerating this module as a list of tabs
+
+  /**
+   * Opens a new tab. The new tab will open in the active window or in a new window, depending on the inNewWindow option
+   * @param options String URL to be opened in the new tab or an options object
+   * @param [options.inNewWindow=false] Determine whether the new tab should be private or not
+   *                                    If your add-on does not support private browsing this will have no effect
+   * @param options.inBackground tab will be opened to the right of the active tab and will not be active
+   * @param options.onOpen This event is emitted when a new tab is opened. This does not mean that the content has loaded,
+   *                       only that the browser tab itself is fully visible to the user.
+   *                       Properties relating to the tab's content (for example: title, favicon, and url) will not be
+   *                       correct at this point. If you need to access these properties, listen for the ready event.
+   * @param options.onClose This event is emitted when a tab is closed. When a window is closed this event will be
+   *                        emitted for each of the open tabs in that window
+   * @param options.onReady This event is emitted when the DOM for a tab's content is ready.
+   *                        It is equivalent to the DOMContentLoaded event for the given content page.
+   *                        A single tab will emit this event every time the DOM is loaded: so it will be emitted again
+   *                        if the tab's location changes or the content is reloaded.
+   *                        After this event has been emitted, all properties relating to the tab's content can be used.
+   */
+  export function open(options: string | {url: string, inNewWindow?: boolean, inBackground?: boolean, isPinned?: boolean,
+                       onOpen?: (tab: Tab) => void, onClose?: (tab: Tab) => void, onReady?: (tab: Tab) => void,
+                       onLoad?: (tab: Tab) => void, onPageShow?: (tab: Tab) => void, onActivate?: (tab: Tab) => void,
+                       onDeactivate?: (tab: Tab) => void}): void;
+
+  export function on(event: "open" | "close" | "ready" | "load" | "pageshow" | "activate" | "deactivate",
+                     handler: (tab: Tab) => void): void;
+
+  /**
+   * The currently active tab in the active window
+   */
+  export const activeTab: Tab;
+
+  /**
+   * The number of open tabs across all windows
+   */
+  export const length: number;
+}
+
+interface Tab {
+  title: string;
+  url: string;
+  id: string;
+  favicon: string;
+  contentType: string;
+  index: number;
+  isPinned: boolean;
+  window: BrowserWindow;
+  readyState: "uninitialized" | "loading" | "interactive" | "complete";
+  on: (event: "ready" | "load" | "pageshow" | "activate" | "deactivate" | "close", handler: (tab: Tab) => void)=> void;
+  attach: (options: {contentScript?: string | string[], contentScriptFile?: string | string[], contentScriptOptions?: Object,
+                     onMessage?: (message: string) => void, onError?: (error: Error) => void}) => ContentWorker;
+  activate: () => void;
+  pin: () => void;
+  unpin: () => void;
+  close: (afterClose?: () => void) => void;
+  reload: () => void;
+  getThumbnail: () => string;
 }
 
 interface SDKURL {

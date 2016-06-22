@@ -53,3 +53,8 @@ storage.on("OverQuota", () => {
 import * as system from "sdk/system";
 console.log(system.env.PATH);
 system.env.PATH = "/path/to/my/virus";
+
+import * as tabs from "sdk/tabs";
+tabs.open({url: "http://example.com", onOpen: (tab) => tab.close()});
+tabs.open("http://example.com");
+console.info(tabs.length);
