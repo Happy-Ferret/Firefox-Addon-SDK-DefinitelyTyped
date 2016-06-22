@@ -209,6 +209,10 @@ declare module "sdk/notifications" {
                                    data?: string}): void;
 }
 
+/**
+ * The SDK port API
+ * @see [port API]{@link https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port}
+ */
 interface Port {
   emit: (signal: string, data?: any) => void;
   on: (signal: string, handler: (data?: any) => void) => void;
@@ -229,7 +233,7 @@ interface ContentWorker {
   destroy: () => void;
 }
 
-export module "sdk/page-mod" {
+declare module "sdk/page-mod" {
   /**
    * Run scripts in the context of web pages whose URL matches a given pattern
    * @param options.include
@@ -302,8 +306,73 @@ declare module "sdk/page-worker" {
 
 }
 
+interface ToggleButton {
 
+}
 
-export module "sdk/self" {
+interface Widget {
+
+}
+
+declare module "sdk/panel" {
+  /**
+   * Creates transient dialogs to implement part of an add-on's user interface
+   * @param options.contentURL The URL of the content to load in the panel. That is, they can't refer to remote scripts
+   * @param options.width The width of the panel in pixels
+   * @param options.height The height of the panel in pixels
+   * @param options.contentScript A string or an array of strings containing the texts of content scripts to load.
+   *                              Content scripts specified by this property are loaded after those specified by the
+   *                              contentScriptFile property
+   * @param options.contentScriptFile A URL or an array of URLs. The URLs point to scripts to load into the panel
+   * @param [options.contentScriptWhen="end"]
+   * @param options.contentStyle A string or an array of strings containing the texts of stylesheets to load.
+   *                             Stylesheets specified by this property are loaded after those specified by the
+   *                             contentStyleFile property
+   * @param options.contentStyleFile A URL or an array of URLs. The URLs point to CSS stylesheets to load into the panel
+   * @param options.position The position of the panel. Ignored if the panel is opened by a widget.
+                             This may be one of three things:
+                              1. a toggle button. If this is supplied the panel will be shown attached to the button
+                              2. a widget object. If this is supplied the panel will be shown attached to the widget.
+                              3. an object which specifies where in the window the panel should be shown
+   * @param [options.focus=true] Set to false to prevent taking the focus away when the panel is shown.
+   *                             Only turn this off if necessary, to prevent accessibility issues
+   * @param options.allow An optional object describing permissions for the content. It should contain a single key
+   *                      named script whose value is a boolean that indicates whether or not to execute script in the content
+   * @param [options.contextMenu=false] Whether to show a context menu when the user context-clicks in the panel.
+   *                                    The context menu will be the same one that's displayed in web pages
+   */
+
+  export function Panel(options: {contentURL?: string | URL, width?: number, height?: number, contentScript?: string | string[],
+                                  contentScriptFile?: string | string[], contentScriptWhen?: "start" | "ready" | "end",
+                                  contentScriptOptions?: any, contentStyle?: string | string[],
+                                  contentStyleFile?: string | string[], position?: PanelPosition,
+                                  allow?: {script?: boolean}, focus?: boolean, contextMenu?: boolean,
+                                  onMessage?: (message: string) => void, onShow?: () => void, onHide?: () => void,
+                                  onError?: (error: Error) => void}): Panel;
+
+  interface Panel {
+    show: (options?: {width?: number, height?: number, position?: PanelPosition, focus?: boolean}) => void;
+    hide: () => void;
+    resize: (width: number, height: number) => void;
+    destroy: () => void;
+    postMessage: (message: string) => void;
+    on: (signal: "show" | "hide" | "message" | "error", handler: (arg?: Error | any) => void) => void;
+    removeListener: (signal: string, listener: Function) => void;
+    port: Port;
+    isShowing: boolean;
+    height: number;
+    width: number;
+    focus: boolean;
+    contentURL?: string | URL;
+    allow?: {script: boolean};
+    contentScriptFile?: string | string[];
+    contentScript?: string | string[];
+    contentScriptWhen: "start" | "ready" | "end";
+    contentScriptOptions?: any;
+  }
+  type PanelPosition = ToggleButton | Widget | {top?: number, right?: number, bottom?: number, left?: number};
+}
+
+declare module "sdk/self" {
   // TODO: data.url() returns a string
 }
