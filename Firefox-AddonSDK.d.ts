@@ -530,7 +530,7 @@ declare module "sdk/selection" {
   // there's no way I know of to limit the event to 'select' only and so this hack
   // this should not even be an argument to the function but I'm not Firefox
   export function on(event: "select" | "select", handler: () => void): void;
-  export function removeListener(event: "select" | "select", handler: Function): void
+  export function removeListener(event: "select" | "select", handler: Function): void;
   /**
    * Gets or sets the current selection as plain text. Setting the selection removes all current selections,
    * inserts the specified text at the location of the first selection, and selects the new text.
@@ -614,6 +614,26 @@ declare module "sdk/self" {
     
   }
   
+}
+
+declare module "sdk/simple-prefs" {
+  /**
+   * Store preferences across application restarts
+   */
+
+  /**
+   * Registers an event listener that will be called when a preference is changed
+   * @param prefName The name of the preference to watch for changes. Empty name '' listens for all preferences
+   * @param listener
+   */
+  export function on(prefName: string, listener: (prefName: string) => void): void;
+
+  /**
+   * Unregisters an event listener for the specified preference
+   */
+  export function removeListener(prefName: string, listener: Function): void;
+
+  export const prefs: Object;
 }
 
 interface SDKURL {

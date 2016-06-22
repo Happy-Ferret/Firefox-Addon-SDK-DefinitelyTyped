@@ -8,6 +8,7 @@ import * as privateBrowsing from "sdk/private-browsing";
 import * as requests from "sdk/request";
 import * as selection from "sdk/selection";
 import * as self from "sdk/self";
+import * as prefs from "sdk/simple-prefs";
 
 
 base64.decode("jesus", "abc");
@@ -36,3 +37,7 @@ selection.on("select", () => {
 
 p.contentScriptFile = self.data.url("./hello.js");
 p.show();
+
+prefs.prefs["pref1"] = "value";
+prefs.on("pref1", () => console.log("pref1 changed"));
+prefs.removeListener("pref1", new Function());
