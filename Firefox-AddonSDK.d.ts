@@ -3,6 +3,22 @@
 // Definitions by: Mohammed Hamdy <https://github.com/github-account-because-they-want-it>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+/**
+ * @see [nsIException]{@link https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIException}
+ */
+interface NSIException {
+  lineNumber: number;
+  columnNumber: number;
+  data: any;
+  filename: string;
+  inner?: NSIException;
+  location?: any;
+  message: string;
+  name: string;
+  result: any;
+  toString: () => string;
+}
+
 declare module "sdk/base64" {
 
   /**
@@ -371,6 +387,43 @@ declare module "sdk/panel" {
     contentScriptOptions?: any;
   }
   type PanelPosition = ToggleButton | Widget | {top?: number, right?: number, bottom?: number, left?: number};
+}
+
+declare module "sdk/passwords" {
+  /**
+   * Interact with Firefox's Password Manager to add, retrieve and remove stored credentials
+   */
+
+  /**
+   * This function is used to retrieve a credential, or a list of credentials, stored in the Password Manager
+   * @param options.onComplete The callback function that is called once the function completes successfully
+   */
+  export function search(options: {onComplete: (credentials: Credential[]) => void, username?: string, url?: string,
+                                   password?: string, formSubmitURL?: string, realm?: string, usernameField?: string,
+                                   passwordField?: string, onError?: (error: NSIException) => void}): void;
+
+  /**
+   * This function is used to store a credential in the Password Manager.
+   * It takes an options object as an argument: this contains all the properties for the new credential.
+   * As different sorts of credentials contain different properties, the appropriate options differ depending
+   * on the sort of credential being stored
+   */
+  export function store(options: Credential & {onComplete?: () => void, onError?: (error: NSIException) => void}): void;
+
+  /**
+   * Removes a stored credential
+   */
+  export function remove(options: Credential & {onComplete?: () => void, onError?: (error: NSIException) => void}): void;
+
+  interface Credential {
+    username: string;
+    password: string;
+    url?: string;
+    formSubmitURL?: string;
+    realm?: string;
+    usernameField?: string;
+    passwordField?: string;
+  }
 }
 
 declare module "sdk/self" {
