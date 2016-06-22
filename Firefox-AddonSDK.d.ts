@@ -132,11 +132,13 @@ declare module "sdk/context-menu" {
   }
   /**
    * A menu item
+   * @constructor
    */
   export function Item(options: {label: string, image?: string, accessKey?: string, context?: Context | Context[],
     contentScript?: string, contentScriptFile?: string,  data?: any, onMessage?: (message?: any) => void}): Item;
   
   /**
+   * @constructor
    * A menu separator
    */
   export function Separator(): Separator;
@@ -163,6 +165,7 @@ declare module "sdk/context-menu" {
 
   /**
    * A labeled menu item that expands into a submenu
+   * @contructor
    * @param options
    */
   export function Menu(options: {label: string, items: ItemMenuSeparator[], image?: string, context?: Context[],
@@ -175,6 +178,7 @@ declare module "sdk/hotkeys" {
     destroy: () => void;
   }
   /**
+   * @contructor
    * Hotkey
    * Used to define a hotkey combination passing it the combination and a function to be called when the user 
    * presses that combination
@@ -252,6 +256,7 @@ interface ContentWorker {
 declare module "sdk/page-mod" {
   /**
    * Run scripts in the context of web pages whose URL matches a given pattern
+   * @constructor
    * @param options.include
    * @param options.contentStyle Lists stylesheets to attach, supplied as strings
    * @param options.contentStyleFile Lists stylesheets to attach, supplied in separate files
@@ -284,6 +289,7 @@ declare module "sdk/page-worker" {
 
   /**
    * Create a permanent, invisible page and access its DOM
+   * @constructor
    * @param options.contentURL The URL of the content to load in the worker
    * @param options.contentScript A string or an array of strings containing the texts of content scripts to load.
    *                              Content scripts specified by this option are loaded after those specified by the
@@ -333,6 +339,7 @@ interface Widget {
 declare module "sdk/panel" {
   /**
    * Creates transient dialogs to implement part of an add-on's user interface
+   * @constructor
    * @param options.contentURL The URL of the content to load in the panel. That is, they can't refer to remote scripts
    * @param options.width The width of the panel in pixels
    * @param options.height The height of the panel in pixels
@@ -463,9 +470,63 @@ declare module "sdk/querystring" {
   export function unescape(query: string): string;
 }
 
+declare module "sdk/request" {
+  /**
+   * Make simple network requests
+   */
+
+  /**
+   * This constructor creates a request object that can be used to make network requests
+   * @param options.url This is the url to which the request will be made
+   * @param options.onComplete This function will be called when the request has received a response
+   *                           (or in terms of XHR, when readyState == 4)
+   * @param options.headers An unordered collection of name/value pairs representing headers to send with the request
+   * @param options.content The content to send to the server. If content is a string, it should be URL-encoded
+   *                        (use encodeURIComponent). If content is an object, it should be a collection of name/value pairs.
+   *                        Nested objects & arrays should encode safely.
+   *                        For GET and HEAD requests, the query string (content) will be appended to the URL.
+   *                        For POST and PUT requests, it will be sent as the body of the request
+   * @param [options.contentType='application/x-www-form-urlencoded'] The type of content to send to the server
+   *                                                                  This explicitly sets the Content-Type header
+   * @param options.overrideMimeType Use this string to override the MIME type returned by the server in the response's
+   *                                 Content-Type header. You can use this to treat the content as a different MIME type,
+   *                                 or to force text to be interpreted using a specific character
+   * @param [options.anonymous=false] If true, the request will be sent without cookies or authentication headers
+   * @constructor
+   */
+  export function Request(options: {url?: string | SDKURL, onComplete?: (response: Response) => void,
+                          headers?: Object, content?: string | Object, contentType?: string, anonymous?: boolean,
+                          overrideMimeType?: string}): Request;
+
+  interface Request {
+    get: () => void;
+    post: () => void;
+    head: () => void;
+    put: () => void;
+    delete: () => void;
+    url: string | SDKURL;
+    headers: Object;
+    content: string;
+    contentType: string;
+    response: Response;
+  }
+  
+  interface Response {
+    url: string;
+    text: string;
+    json: Object;
+    status: number;
+    statusText: string;
+    headers: Object;
+    anonymous: boolean;
+  }
+}
+
 declare module "sdk/self" {
   // TODO: data.url() returns a string
 }
+
+interface SDKURL { }
 
 interface BrowserWindow {
   
