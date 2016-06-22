@@ -3,6 +3,8 @@
 import * as base64 from "sdk/base64";
 import * as panel from "sdk/panel";
 import * as passwords from "sdk/passwords";
+import * as pageMod from "sdk/page-mod"
+import * as privateBrowsing from "sdk/private-browsing";
 
 
 base64.decode("jesus", "abc");
@@ -16,3 +18,5 @@ p.destroy();
 passwords.search({onComplete: (credentials) => credentials.forEach((cred) => passwords.remove(cred)),
                   username: "mhamdy"});
 passwords.store({username: "mhamdy", password: "secret", onError: (error) => console.error(error.toString())});
+
+pageMod.PageMod({include: "http://example.com", onAttach: (worker) => privateBrowsing.isPrivate(worker)});

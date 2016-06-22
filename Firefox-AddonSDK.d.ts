@@ -426,6 +426,17 @@ declare module "sdk/passwords" {
   }
 }
 
+declare module "sdk/private-browsing" {
+  /**
+   * Check whether a given object is private, so an add-on can respect private browsing
+   */
+  export function isPrivate(object: Tab | ContentWorker | BrowserWindow): boolean;
+}
+
 declare module "sdk/self" {
   // TODO: data.url() returns a string
+}
+
+interface BrowserWindow {
+  
 }
