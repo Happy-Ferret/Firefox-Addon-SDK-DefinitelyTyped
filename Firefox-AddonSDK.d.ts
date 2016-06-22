@@ -433,6 +433,36 @@ declare module "sdk/private-browsing" {
   export function isPrivate(object: Tab | ContentWorker | BrowserWindow): boolean;
 }
 
+declare module "sdk/querystring" {
+  /**
+   * Utility functions for working with query strings
+   */
+
+  /**
+   * Serializes an object containing name:value pairs into a query string
+   * @param object {Object} The data to convert to a query string
+   * @param [separator='&'] The string to use as a separator between each name:value pair
+   * @param [assignment='='] The string to use between each name and its corresponding value
+   */
+  export function stringify(object: Object, separator?: string, assignment?: string): string;
+
+  /**
+   * Parse a query string into an object containing name:value pairs
+   */
+  export function parse(querystring: string, separator?: string, assignment?: string): Object;
+
+  /**
+   * The escape function used by stringify to encodes a string safely matching RFC 3986 for
+   * application/x-www-form-urlencoded
+   */
+  export function escape(query: string): string;
+
+  /**
+   * The unescape function used by parse to decode a string safely
+   */
+  export function unescape(query: string): string;
+}
+
 declare module "sdk/self" {
   // TODO: data.url() returns a string
 }
