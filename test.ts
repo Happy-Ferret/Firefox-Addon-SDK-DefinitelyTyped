@@ -49,3 +49,7 @@ storage.on("OverQuota", () => {
     console.log("you no longer have shelves to store anything. Successful!");
   }
 });
+
+import * as system from "sdk/system";
+console.log(system.env.PATH);
+system.env.PATH = "/path/to/my/virus";

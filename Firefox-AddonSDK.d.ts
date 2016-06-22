@@ -654,6 +654,75 @@ declare module "sdk/simple-storage" {
   export function on(event: "OverQuota" | "OverQuota", handler: () => void): void;
 }
 
+/**
+ * Query the add-on's environment and access arguments passed to it
+ */
+declare module "sdk/system" {
+
+  /**
+   * Quits the host application with the specified code
+   * @param [code=0]
+   */
+  export function exit(code: number): void;
+
+  /**
+   * Firefox enables you to get the path to certain "special" directories, such as the desktop or the profile directory.
+   * This function exposes that functionality to add-on authors
+   * @param id see [@link https://developer.mozilla.org/en-US/docs/Code_snippets/File_I_O#Getting_files_in_special_directories}
+   */
+  export function pathFor(id: string): string;
+
+  /**
+   * This object provides access to environment variables
+   */
+  export const env: any;
+
+  /**
+   * The type of operating system you're running on
+   */
+  export const platform: string;
+
+  /**
+   * The type of processor architecture you're running on. This will be one of: "arm","ia32", or"x64"
+   */
+  export const architecture: string;
+
+  /**
+   * The type of compiler used to build the host application. For example: "msvc", "n32", "gcc2", "gcc3", "sunc", "ibmc"
+   */
+  export const compiler: string;
+
+  /**
+   * An identifier for the specific build, derived from the build date. This is useful if you're trying to target individual nightly builds
+   */
+  export const build: string;
+
+  /**
+   * The UUID for the host application. For example, "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}" for Firefox
+   */
+  export const id: string;
+
+  /**
+   * The human-readable name for the host application. For example, "Firefox"
+   */
+  export const name: string;
+
+  /**
+   * The version of the host application
+   */
+  export const version;
+
+  /**
+   * The version of XULRunner that underlies the host application
+   */
+  export const platformVersion;
+
+  /**
+   * The name of the host application's vendor, for example: "Mozilla"
+   */
+  export const vendor;
+}
+
 interface SDKURL {
 }
 
