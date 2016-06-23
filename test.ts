@@ -62,3 +62,11 @@ console.info(tabs.length);
 import * as timers from "sdk/timers";
 timers.clearTimeout(timers.setInterval(() => console.log("hello"), 100));
 timers.clearInterval(timers.setTimeout(() => console.log("hello again"), 100));
+
+import * as action from "sdk/ui/button/action";
+let button = action.ActionButton({id: "my button", label: "my button", icon: "./myicon.png"});
+button.on("click", (state) => {
+  if (state.label == "destroy") {
+    button.destroy();
+  }
+});

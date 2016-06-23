@@ -808,13 +808,58 @@ declare module "sdk/timers" {
    * Given an ID returned from setInterval(), prevents the callback with the ID from being called again
    */
   export function clearInterval(intervalID: INTERVAL_ID): void;
-  
+
   type TIMEOUT_ID = number;
   type INTERVAL_ID = number;
 
 }
 
+/**
+ * Add a button to the Firefox user interface
+ * With this module you can create buttons that display icons and can respond to click events
+ */
+declare module "sdk/ui/button/action" {
+  /**
+   * Creates an action button
+   * @constructor
+   * @param options.id The button's ID. This is used internally to keep track of this button
+   *                   The ID must be unique within your add-on
+   * @param options.label The button's human-readable label. When the button is in the toolbar,
+   *                      this appears in a tooltip, and when the button is in the menu,
+   *                      it appears underneath the button as a legend
+   * @param options.icon One or more icons for the button
+   */
+  export function ActionButton(options: {id: string, label: string,
+                               icon: Icon, onClick?: (state: ActionButton) => void,
+                               onChange?: (state: ActionButtonState) => void, disabled?: boolean,
+                               badge?: string | number, badgeColor?: string}): ActionButton;
+
+  interface ActionButtonState {
+    id: string;
+    label: string;
+    disabled: boolean;
+    icon: Icon;
+    badge: string | number;
+    badgeColor: string;
+  }
+
+  interface ActionButton extends ActionButtonState {
+    // there's a compromise here by always returning ActionButtonState. It will return undefined if no options are passed
+    state: (target: BrowserWindow | Tab | ActionButton | "window" | "tab",
+            options?: {disabled?: boolean, label?: string, icon?: Icon}) => ActionButtonState;
+    click: () => void;
+    destroy: () => void;
+    on: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void ;
+    once: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void;
+    removeListener: (event: "click" | "click", handler: Function) => void;
+  }
+
+  type Icon = string | {"16"?: string, "32"?: string, "64"?: string};
+
+}
+
 interface SDKURL {
+  
 }
 
 interface BrowserWindow {
