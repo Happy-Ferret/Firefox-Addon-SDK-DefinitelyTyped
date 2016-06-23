@@ -3,6 +3,7 @@
 // Definitions by: Mohammed Hamdy <https://github.com/github-account-because-they-want-it>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+
 /**
  * @see [nsIException]{@link https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIException}
  */
@@ -327,10 +328,6 @@ declare module "sdk/page-worker" {
     contentScriptFile?: string | string[];
     contentScript?: string | string[];
   }
-
-}
-
-interface ToggleButton {
 
 }
 
@@ -846,7 +843,7 @@ declare module "sdk/ui/button/action" {
   interface ActionButton extends ActionButtonState {
     // there's a compromise here by always returning ActionButtonState. It will return undefined if no options are passed
     state: (target: BrowserWindow | Tab | ActionButton | "window" | "tab",
-            options?: {disabled?: boolean, label?: string, icon?: Icon}) => ActionButtonState;
+            state?: {disabled?: boolean, label?: string, icon?: Icon}) => ActionButtonState;
     click: () => void;
     destroy: () => void;
     on: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void ;
@@ -854,8 +851,48 @@ declare module "sdk/ui/button/action" {
     removeListener: (event: "click" | "click", handler: Function) => void;
   }
 
-  type Icon = string | {"16"?: string, "32"?: string, "64"?: string};
+}
 
+/**
+ * Add a toggle button to the Firefox user interface
+ * With this module you can create buttons that function like a check box, representing an on/off choice
+ */
+declare module "sdk/ui/button/toggle" {
+  /**
+   * Creates a toggle button
+   * @constructor
+   * @param options.id The button's ID. This is used internally to keep track of this button
+   *                   The ID must be unique within your add-on
+   * @param options.label The button's human-readable label. When the button is in the toolbar,
+   *                      this appears in a tooltip, and when the button is in the menu,
+   *                      it appears underneath the button as a legend
+   * @param options.icon One or more icons for the button
+   */
+  export function ToggleButton(options: {id: string, label: string, icon: Icon,
+                                         onChange?: (state: ToggleButtonState) => void,
+                                         onClick?: (state: ToggleButtonState) => void, badge?: string | number,
+                                         badgeColor?: string, disabled?: boolean, checked?: boolean}): ToggleButton;
+
+}
+
+type Icon = string | {"16"?: string, "32"?: string, "64"?: string};
+
+interface ToggleButtonState {
+  id: string;
+  label: string;
+  badge: string;
+  checked: boolean;
+  disabled: boolean;
+}
+
+interface ToggleButton extends ToggleButtonState {
+  click: () => void;
+  on: (event: "click" | "change", handler: (state: ToggleButtonState) => void) => void;
+  once: (event: "click" | "change", handler: (state: ToggleButtonState) => void) => void;
+  removeListener: (event: string, handler: Function) => void;
+  state: (target: "window" | "tab" | Tab | BrowserWindow | ToggleButton, state?: {disabled?: boolean, label?: string, icon?: Icon,
+    checked?: boolean, badge?: string | number, badgeColor?: string}) => ToggleButtonState;
+  destroy: () => void;
 }
 
 interface SDKURL {

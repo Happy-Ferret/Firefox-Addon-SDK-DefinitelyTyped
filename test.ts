@@ -70,3 +70,11 @@ button.on("click", (state) => {
     button.destroy();
   }
 });
+
+import * as toggle from "sdk/ui/button/toggle";
+let toggleButton = toggle.ToggleButton({id: "my button", label: "my button", icon: "./hello.png",
+  onChange: (state) => {
+    if (state.disabled) {
+      toggleButton.state("window", null);
+    }
+  }});
