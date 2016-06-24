@@ -830,27 +830,26 @@ declare module "sdk/ui/button/action" {
                                icon: Icon, onClick?: (state: ActionButton) => void,
                                onChange?: (state: ActionButtonState) => void, disabled?: boolean,
                                badge?: string | number, badgeColor?: string}): ActionButton;
+}
 
-  interface ActionButtonState {
-    id: string;
-    label: string;
-    disabled: boolean;
-    icon: Icon;
-    badge: string | number;
-    badgeColor: string;
-  }
+interface ActionButtonState {
+  id: string;
+  label: string;
+  disabled: boolean;
+  icon: Icon;
+  badge: string | number;
+  badgeColor: string;
+}
 
-  interface ActionButton extends ActionButtonState {
-    // there's a compromise here by always returning ActionButtonState. It will return undefined if no options are passed
-    state: (target: BrowserWindow | Tab | ActionButton | "window" | "tab",
-            state?: {disabled?: boolean, label?: string, icon?: Icon}) => ActionButtonState;
-    click: () => void;
-    destroy: () => void;
-    on: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void ;
-    once: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void;
-    removeListener: (event: "click" | "click", handler: Function) => void;
-  }
-
+interface ActionButton extends ActionButtonState {
+  // there's a compromise here by always returning ActionButtonState. It will return undefined if no options are passed
+  state: (target: BrowserWindow | Tab | ActionButton | "window" | "tab",
+          state?: {disabled?: boolean, label?: string, icon?: Icon}) => ActionButtonState;
+  click: () => void;
+  destroy: () => void;
+  on: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void ;
+  once: (event: "click" | "click", handler: (state: ActionButtonState) => void) => void;
+  removeListener: (event: "click" | "click", handler: Function) => void;
 }
 
 /**
@@ -943,6 +942,39 @@ interface Frame {
   removeListener: (event: "attach" | "detach" | "load" | "ready" | "message", handler: Function) => void;
   off: (event: "attach" | "detach" | "load" | "ready" | "message", handler: Function) => void;
   destroy: () => void;
+}
+
+/**
+ * Add a toolbar to the Firefox user interface. A toolbar is a horizontal strip of user interface real estate
+ */
+declare module "sdk/ui/toolbar" {
+  /**
+   * @constructor
+   * @param options.title The toolbar's title. This appears as the name of the toolbar in the Firefox "Toolbars" menu
+   *        It must be unique
+   * @param options.title An array of items to appear in the toolbar. Each item in items must be an action button,
+   *        a toggle button, or a frame instance. Buttons each take up a fixed width.
+   *        If more than one frame is supplied here, the frames each occupy an equal vertical strip of the toolbar
+   * @param options.onAttach This event is emitted when the toolbar is first loaded.
+   *        Note that since there is only one toolbar for the whole browser, opening another browser window does not
+   *        cause this event to be emitted again. After this event the toolbar's properties are available
+   */
+  export function Toolbar(options: {title: string, items: ToolbarItem[], hidden?: boolean,
+                          onAttach?: (toolbar: Toolbar) => void, onDetach?: (toolbar: Toolbar) => void,
+                          onShow?: (toolbar: Toolbar) => void, onHide?: (toolbar: Toolbar) => void}): Toolbar;
+
+  interface Toolbar {
+    title: string;
+    items: ToolbarItem[];
+    hidden: boolean;
+    on: (event: "show" | "hide" | "attach" | "detach", handler: (toolbar: Toolbar) => void) => void;
+    once: (event: "show" | "hide" | "attach" | "detach", handler: (toolbar: Toolbar) => void) => void;
+    removeListener: (event: "show" | "hide" | "attach" | "detach", Function) => void;
+    off: (event: "show" | "hide" | "attach" | "detach", Function) => void;
+    destroy: () => void;
+  }
+
+  type ToolbarItem = Frame | ActionButton | ToggleButton;
 }
 
 interface SDKURL {

@@ -84,3 +84,8 @@ import * as frame from "sdk/ui/frame";
 let frm = frame.Frame({url: "./frame.html", onMessage: (message) => {
   frm.postMessage("hello", message.origin);
 }});
+
+import * as toolbar from "sdk/ui/toolbar";
+let tlbr = toolbar.Toolbar({title: "my toolbar", items: [button, toggleButton, frm], onShow: (toolbar) => {
+  toolbar.on("detach", () => console.info("toolbar detached"));
+}});
