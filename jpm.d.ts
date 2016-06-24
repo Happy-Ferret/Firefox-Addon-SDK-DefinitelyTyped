@@ -457,8 +457,12 @@ declare module "sdk/request" {
   export function Request(options: {url?: string | FFAddonSDK.SDKURL, onComplete?: (response: Response) => any,
                           headers?: Object, content?: string | Object, contentType?: string, anonymous?: boolean,
                           overrideMimeType?: string}): Request;
+  // a strongly-typed generic variant of the request
+  export function Request<ResponseType>(options: {url?: string | FFAddonSDK.SDKURL, onComplete?: (response: STResponse<ResponseType>) => any,
+                          headers?: Object, content?: string | Object, contentType?: string, anonymous?: boolean,
+                          overrideMimeType?: string}): STRequest<ResponseType>;
 
-  interface Request {
+  interface BaseRequest {
     get: () => void;
     post: () => void;
     head: () => void;
@@ -468,17 +472,31 @@ declare module "sdk/request" {
     headers: Object;
     content: string;
     contentType: string;
-    response: Response;
   }
   
-  interface Response {
+  interface Request extends BaseRequest {
+    response: Object;
+  }
+  
+  interface STRequest<ResponseType> extends BaseRequest{
+    response: STResponse<ResponseType>;
+  }
+  
+  interface BaseResponse {
     url: string;
     text: string;
-    json: Object;
     status: number;
     statusText: string;
     headers: Object;
     anonymous: boolean;
+  }
+  
+  interface Response extends BaseResponse {
+    json: Object;
+  }
+  
+  interface STResponse<T> {
+    json: T;
   }
 }
 
@@ -595,6 +613,7 @@ declare module "sdk/simple-prefs" {
   export function removeListener(prefName: string, listener: Function): void;
 
   export const prefs: Object;
+  
 }
 
 /**

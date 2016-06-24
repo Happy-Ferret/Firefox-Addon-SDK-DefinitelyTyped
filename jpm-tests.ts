@@ -20,7 +20,7 @@ import * as privateBrowsing from "sdk/private-browsing";
 pageMod.PageMod({include: "http://example.com", onAttach: (worker) => privateBrowsing.isPrivate(worker)});
 
 import * as requests from "sdk/request";
-requests.Request({url: "http://example.com", onComplete: (response) => console.log(response.json["value"])}).get();
+requests.Request<{value: string}>({url: "http://example.com", onComplete: (response) => console.log(response.json["value"])}).get();
 
 import * as selection from "sdk/selection";
 selection.on("select", () => {
@@ -36,7 +36,8 @@ p.contentScriptFile = self.data.url("./hello.js");
 p.show();
 
 import * as prefs from "sdk/simple-prefs";
-prefs.prefs["pref1"] = "value";
+type prefType = {pref1: string};
+(prefs.prefs as prefType)["pref1"] = "value";
 prefs.on("pref1", () => console.log("pref1 changed"));
 prefs.removeListener("pref1", new Function());
 
@@ -101,6 +102,7 @@ console.log(urls.toFilename(urls.URL("http://example.com")));
 console.log(urls.DataURL("file:///my/path/file.txt").mimeType);
 
 import * as windows from "sdk/windows";
+import {stringify} from "sdk/querystring";
 for (let window of windows.browserWindows) {
   console.info(window.title);
 }
