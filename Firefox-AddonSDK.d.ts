@@ -977,6 +977,38 @@ declare module "sdk/ui/toolbar" {
   type ToolbarItem = Frame | ActionButton | ToggleButton;
 }
 
+/**
+ * Enables you to create sidebars. A sidebar is a vertical strip of user interface real estate for your add-on that's
+ * attached to the left-hand side of the browser window. You specify its content using HTML, CSS, and JavaScript,
+ * and the user can show or hide it in the same way they can show or hide the built-in sidebars
+ */
+declare module "sdk/ui/sidebar" {
+
+  /**
+   * @constructor
+   * @param options.id The id of the sidebar. This used to identify this sidebar in its chrome window. It must be unique
+   */
+  export function Sidebar(options: {id?: string, title: string, url: string, onShow?: () => void, onHide?: () => void,
+                          onAttach?: (worker: SidebarWorker) => void, onDetach?: () => void,
+                          onReady?: (worker: SidebarWorker) => void}): Sidebar;
+
+  interface Sidebar {
+    id: string;
+    title: string;
+    url: string;
+    show: (window?: BrowserWindow) => void;
+    hide: (window?: BrowserWindow) => void;
+    on: (event: "show" | "hide" | "attach" | "detach" | "ready", handler: (worker: SidebarWorker) => void) => void;
+    once: (event: "show" | "hide" | "attach" | "detach" | "ready", handler: (worker: SidebarWorker) => void) => void;
+    removeListener: (event: "show" | "hide" | "attach" | "detach" | "ready", handler: Function) => void;
+    dispose: () => void;
+  }
+
+  interface SidebarWorker {
+    port: Port;
+  }
+}
+
 interface SDKURL {
   
 }

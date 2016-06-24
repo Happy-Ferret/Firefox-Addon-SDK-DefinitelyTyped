@@ -89,3 +89,9 @@ import * as toolbar from "sdk/ui/toolbar";
 let tlbr = toolbar.Toolbar({title: "my toolbar", items: [button, toggleButton, frm], onShow: (toolbar) => {
   toolbar.on("detach", () => console.info("toolbar detached"));
 }});
+
+import * as sidebar from "sdk/ui/sidebar";
+let sdbr = sidebar.Sidebar({url: "./sidebar.html", title: "my sidebar"});
+sdbr.on("attach", (worker) => {
+  worker.port.emit("hello sidebar");
+});
