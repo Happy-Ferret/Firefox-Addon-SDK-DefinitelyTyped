@@ -6,10 +6,10 @@ Currently, only the [High-level APIs](https://developer.mozilla.org/en-US/docs/M
 
 ## Usage
 
-1. Copy the code in [Firefox-AddonSDK.d.ts](./Firefox-AddonSDK.d.ts) to a file in your project
+1. Copy the code in [Firefox-AddonSDK.d.ts](./jpm.d.ts) to a file in your project
 2. Add a reference at the very top of your .ts files to the file, like this:
 
-`/// <reference path="./path/to/Firefox-AddonSDK.d.ts" />`
+`/// <reference path="./path/to/jpm.d.ts" />`
 
 ## Omissions
 The typings intentionally omit the deprecated [addon-page](https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/addon-page) and [widget](https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/widget) APIs.

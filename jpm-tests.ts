@@ -1,4 +1,4 @@
-/// <reference path="Firefox-AddonSDK.d.ts" />
+/// <reference path="jpm.d.ts" />
 
 import * as base64 from "sdk/base64";
 base64.decode("jesus", "abc");
