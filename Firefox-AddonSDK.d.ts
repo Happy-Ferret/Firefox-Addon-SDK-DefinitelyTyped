@@ -1079,6 +1079,30 @@ interface SDKURL {
   toJSON: () => string;
 }
 
+/**
+ * Enumerate and examine open browser windows, open new windows, and listen for window events
+ */
+declare module "sdk/windows" {
+
+  export const browserWindows: BrowserWindows;
+
+  interface BrowserWindows extends Array<BrowserWindow> {
+    /**
+     * Open a new window
+     * @param options.isPrivate determines whether the new window should be private or not
+     */
+    open: (options: string | {url: string, isPrivate?: boolean, onOpen?: (window: BrowserWindow) => void,
+                            onClose?: (window: BrowserWindow) => void, onActivate?: (window: BrowserWindow) => void,
+                            onDeactivate?: (window: BrowserWindow) => void}) => BrowserWindow;
+    on: (event: "open" | "close" | "activate" | "deactivate", handler: (window: BrowserWindow) => void) => void;
+    activeWindow: BrowserWindow;
+  }
+
+}
+
 interface BrowserWindow {
-  
+  title: string;
+  activate: () => void;
+  close: (callback?: () => void) => void;
+  tabs: Tab[];
 }

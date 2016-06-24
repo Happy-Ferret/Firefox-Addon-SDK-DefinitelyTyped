@@ -99,3 +99,10 @@ sdbr.on("attach", (worker) => {
 import * as urls from "sdk/url";
 console.log(urls.toFilename(urls.URL("http://example.com")));
 console.log(urls.DataURL("file:///my/path/file.txt").mimeType);
+
+import * as windows from "sdk/windows";
+for (let window of windows.browserWindows) {
+  console.info(window.title);
+}
+console.info(windows.browserWindows.length);
+windows.browserWindows.open("http://example.com");
