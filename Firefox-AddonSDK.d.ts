@@ -1009,8 +1009,74 @@ declare module "sdk/ui/sidebar" {
   }
 }
 
+/**
+ * Construct, validate, and parse URLs
+ */
+declare module "sdk/url" {
+  /**
+   * The URL constructor creates an object that represents a URL, verifying that the provided string is a valid URL in the process.
+   * Any API in the SDK which has a URL parameter will accept URL objects, not raw strings, unless otherwise noted
+   * @constructor
+   * @param source A string to be converted into a URL. If source is not a valid URI, this constructor will throw an exception
+   * @param base Used to resolve relative source URLs into absolute ones
+   */
+  export function URL(source: string, base?: string): SDKURL;
+
+  /**
+   * The DataURL constructor creates an object that represents a data: URL,
+   * verifying that the provided string is a valid data: URL in the process
+   * @constructor
+   * @param uri A string to be parsed as Data URL. If is not a valid URI, this constructor will throw an exception
+   */
+  export function DataURL(uri: string): DataURL;
+
+  /**
+   * Attempts to convert the given URL to a native file path. This function will automatically attempt to resolve
+   * non-file protocols, such as the resource: protocol, to their place on the file system.
+   * An exception is raised if the URL can't be converted; otherwise, the native file path is returned as a string
+   */
+  export function toFilename(url: SDKURL): string;
+
+  /**
+   * Converts the given native file path to a file: URL
+   */
+  export function toFileName(url: string): string;
+
+  /**
+   * Checks the validity of a URI. isValidURI("http://mozilla.org") would return true,
+   * whereas isValidURI("mozilla.org") would return false
+   */
+  export function isValidURI(uri: string): boolean;
+
+  /**
+   * Returns the top-level domain for the given URL: that is, the highest-level domain under which individual domains may be registered
+   */
+  export function getTLD(url: string): string;
+
+  interface DataURL {
+    toString: () => string;
+    mimeType: string;
+    parameters: Object;
+    base64: string;
+    data: string;
+  }
+}
+
 interface SDKURL {
-  
+  scheme: string;
+  userPass: string;
+  host: string;
+  port: string;
+  path: string;
+  hostname: string;
+  pathname: string;
+  hash: string;
+  href: string;
+  origin: string;
+  protocol: string;
+  search: string;
+  toString: () => string;
+  toJSON: () => string;
 }
 
 interface BrowserWindow {

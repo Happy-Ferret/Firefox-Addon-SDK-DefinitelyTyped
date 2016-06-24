@@ -95,3 +95,7 @@ let sdbr = sidebar.Sidebar({url: "./sidebar.html", title: "my sidebar"});
 sdbr.on("attach", (worker) => {
   worker.port.emit("hello sidebar");
 });
+
+import * as urls from "sdk/url";
+console.log(urls.toFilename(urls.URL("http://example.com")));
+console.log(urls.DataURL("file:///my/path/file.txt").mimeType);
