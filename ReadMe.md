@@ -2,7 +2,7 @@
 
 Type definitions for your [Firefox Addon SDK](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Add-on_SDK) addon written using [TypeScript](https://www.typescriptlang.org).
 
-Currently, only the [High-level APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs) are typed.
+Currently, only the [High-level APIs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs) are typed. These should suffice for many use cases.
 
 ## Usage
 
