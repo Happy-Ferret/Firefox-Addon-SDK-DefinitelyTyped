@@ -895,6 +895,56 @@ interface ToggleButton extends ToggleButtonState {
   destroy: () => void;
 }
 
+/**
+ * Create HTML iframes, using bundled HTML, CSS and JavaScript,
+ * that can be added to a designated area of the Firefox user interface. At the moment you can only add frames to a toolbar
+ */
+
+declare module "sdk/ui/frame" {
+
+  /**
+   * Creates a frame. Once created, the frame needs to be added to a toolbar for it to be visible
+   * @param options.url A URL pointing to the HTML file specifying the frame's content.
+   *                    The file must be bundled with the add-on under its "data" directory
+   * @param options.name The frame's name. This must be unique within your add-on.
+       This is used to generate an ID to to keep track of the frame. If you don't supply a name, the ID is derived from
+       the frame's URL, meaning that if you don't supply a name, you may not create two frames with the same URL
+   * @param options.onReady This event is emitted while a frame instance is being loaded, at the point where it becomes
+   *        possible to interact with the frame although sub-resources may still be in the process of loading
+   *        It's the equivalent of the point where the frame's document.readyState becomes "interactive"
+   * @param options.onAttach This event is emitted whenever a new frame instance is constructed and the browser has
+   *        started to load its document: for example, when the user opens a new browser window, if that window has a
+   *        toolbar containing this frame. Since the event is dispatched asynchronously, the document may already be
+   *        loaded by the time the event is received.
+   *        At this point, you should not try to send messages to scripts hosted in the frame
+   *        because the frame scripts may not have been loaded
+   * @param options.onDetach This event is emitted when a frame instance is unloaded: for example, when the user
+   *        closes a browser window, if that window has a toolbar containing this frame.
+   *        After receiving this message, you ahould not attempt to communicate with the frame scripts
+   * @constructor
+   */
+  export function Frame(options: {url: string, name?: string, onMessage?: (message: FrameEvent) => void,
+                        onReady?: (event: FrameEvent) => void, onLoad?: (event: FrameEvent) => void,
+                        onAttach?: (event: FrameEvent) => void, onDetach?: (event: FrameEvent) => void}): Frame;
+
+}
+
+interface FrameEvent {
+  origin: string;
+  source: Frame;
+  data?: any;
+}
+
+interface Frame {
+  url: URL;
+  postMessage: (message: string, target: string) => void;
+  on: (event: "attach" | "detach" | "load" | "ready" | "message", handler: (event: FrameEvent) => void) => void;
+  once: (event: "attach" | "detach" | "load" | "ready" | "message", handler: (event: FrameEvent) => void) => void;
+  removeListener: (event: "attach" | "detach" | "load" | "ready" | "message", handler: Function) => void;
+  off: (event: "attach" | "detach" | "load" | "ready" | "message", handler: Function) => void;
+  destroy: () => void;
+}
+
 interface SDKURL {
   
 }

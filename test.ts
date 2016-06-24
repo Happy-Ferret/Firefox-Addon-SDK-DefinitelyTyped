@@ -78,3 +78,9 @@ let toggleButton = toggle.ToggleButton({id: "my button", label: "my button", ico
       toggleButton.state("window", null);
     }
   }});
+
+
+import * as frame from "sdk/ui/frame";
+let frm = frame.Frame({url: "./frame.html", onMessage: (message) => {
+  frm.postMessage("hello", message.origin);
+}});
